@@ -1,2 +1,0 @@
-# DeelLearningTest
-DeepLearning TEST.py
