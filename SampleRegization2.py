@@ -1,16 +1,16 @@
-from keras.preprocessing.image import ImageDataGenerator
-from keras.preprocessing import image
+
+from tensorflow.keras.preprocessing import image
 import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.svm import SVC
 import os
 from sklearn.decomposition import KernelPCA
-from keras.models import Model,Input
-from keras.layers import Dense
+#from tensorflow.keras.models import Model,Input
+#from tensorflow.keras.layers import Dense
 import tensorflow as tf
-import keras.backend as backend
-
+import tensorflow.keras.backend as backend
+import pywt as wt
 
 
 #图片转数组
@@ -95,11 +95,26 @@ print('SVM分类准确率为:%.4f:'%(svm_score))
 #PCA降维
 from sklearn.decomposition import PCA
 pca=PCA(n_components=0.95)
+
+#数据处理
+#标准化
+import sklearn
+scaler=sklearn.preprocessing.StandardScaler().fit(train_data[:,:-1],train_data[:,-1])
+scaler.transform(train_data[:,:-1])
+scaler.transform(test_data[:,:-1])
+
 pca.fit(train_data[:,:-1],train_data[:,-1])
 dataset=pca.transform(train_data[:,:-1])
 dec_model.fit(dataset,train_data[:,-1])
 
+
 testdata=pca.transform(test_data[:,:-1])
+
+
+#PCA降维之后需要进行数据预处理
+#如小波变换
+
+
 dec_score1=dec_model.score(testdata,test_data[:,-1])
 print('PCA降维之后的决策树分类准确率为:%.4f:'%(dec_score1))
 
@@ -130,9 +145,11 @@ decode_imgdata=Dense(units=layer2_out,activation='relu')(encode_imgdata)
 decode_imgdata=Dense(units=layer1_out,activation='relu')(decode_imgdata)
 decode_imgdata=Dense(units=origimg_datasize,activation='tanh')(decode_imgdata)
 
-autoencoder=Model(inputs=input_data,outputs=decode_imgdata)
-encoder=Model(inputs=input_data,outputs=encode_imgdata)
+# autoencoder=Model(inputs=input_data,outputs=decode_imgdata)
+# # encoder=Model(inputs=input_data,outputs=encode_imgdata)
+# #
+# # autoencoder.compile(optimizer='adam',loss='mse')
+# #
+# # autoencoder.fit(origimg,origimg)
 
-autoencoder.compile(optimizer='adam',loss='mse')
-
-autoencoder.fit(origimg,origimg)
+#使用GPU跑

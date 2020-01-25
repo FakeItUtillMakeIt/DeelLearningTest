@@ -1,4 +1,4 @@
-#AlexNet卷积神经网络
+
 
 from sklearn.decomposition import PCA
 from keras.preprocessing import image

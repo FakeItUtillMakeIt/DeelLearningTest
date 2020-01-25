@@ -75,7 +75,7 @@ def train_ch5(net,train_iter,test_iter,batch_size,trainer,ctx,num_epochs):
                 test_acc=evaluate_accuracy(test_iter,net,ctx)
                 print('epoch%d,loss%.4f,train acc%.3f,test_acc%.3f,time%.1f sec'%(epoch+1,train_l_sum/n,
                                                                                   train_acc_sum/n,test_acc,time.time()-start))
-lr,num_epochs=0.9,5
+lr,num_epochs=0.9,50
 net.initialize(force_reinit=True,ctx=ctx,init=init.Xavier())
 #更新参数函数
 trainer=gluon.Trainer(net.collect_params(),'sgd',{'learning_rate':lr})
